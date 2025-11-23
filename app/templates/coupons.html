@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<main class="cony-app coupons-page">
+    <header class="hero sub">
+        <div>
+            <p class="eyebrow">查看優惠券</p>
+            <h1>Cony Coupon Room</h1>
+            <p>把在遊戲與聊天活動中贏得的優惠券集中展示給玩家。</p>
+        </div>
+        <div class="hero-avatar" style="background-image: url('{{ avatar_src }}');"></div>
+    </header>
+
+    <section class="card" id="coupons-section">
+        <div class="card-header">
+            <h2>我的優惠券</h2>
+            <p>依照獲得順序列出，方便搭配LINE圖文選單。</p>
+        </div>
+        <ul id="coupon-list" class="coupon-list"></ul>
+    </section>
+</main>
+{% endblock %}

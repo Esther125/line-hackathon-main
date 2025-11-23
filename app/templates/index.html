@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<main class="cony-app home">
+    <header class="hero simple">
+        <div class="hero-text">
+            <p class="eyebrow">WELCOME</p>
+            <h1>Cony Playland</h1>
+            <p>歡迎來到Cony的粉紅任務站，在這裡你可以認識她、玩遊戲、蒐集優惠券！</p>
+        </div>
+        <div class="hero-square" style="background-image: url('{{ avatar_src }}');"></div>
+    </header>
+
+    <section class="feature-rows">
+        <article class="feature-card">
+            <div>
+                <p class="eyebrow">Chat</p>
+                <h2>和 Cony 聊天</h2>
+                <p>體驗 LINE 官方帳號中的 Cony 人設，讓玩家在圖文選單前先感受粉紅語氣。</p>
+            </div>
+            <a href="/about" class="primary">開始聊天</a>
+        </article>
+        <article class="feature-card">
+            <div>
+                <p class="eyebrow">Play</p>
+                <h2>和 Cony 玩遊戲</h2>
+                <p>挑戰猜甜點小遊戲，贏了就會獲得 Cony 粉紅 9 折券，和朋友分享勝利。</p>
+            </div>
+            <a href="/play" class="primary">開始挑戰</a>
+        </article>
+        <article class="feature-card">
+            <div>
+                <p class="eyebrow">Coupons</p>
+                <h2>查看我的優惠券</h2>
+                <p>把所有贏得的獎勵集中在一頁，方便 LINE 圖文選單快速導向。</p>
+            </div>
+            <a href="/coupons-room" class="primary">開啟優惠券</a>
+        </article>
+    </section>
+</main>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<main class="cony-app about-page">
+    <header class="hero sub">
+        <div>
+            <p class="eyebrow">認識可妮兔</p>
+            <h1>About Cony</h1>
+            <p>提供角色介紹與即時聊天示範，讓玩家熟悉人物人設。</p>
+        </div>
+        <div class="hero-avatar" style="background-image: url('{{ avatar_src }}');"></div>
+    </header>
+
+    <section class="card about-card" id="about-section">
+        <h2>Cony的個性</h2>
+        <div class="about-layout">
+            <div class="about-text">
+                <div id="about-content" aria-live="polite">Loading...</div>
+                <div class="pill-row">
+                    <span class="pill">愛吃甜點</span>
+                    <span class="pill">Brown女友</span>
+                    <span class="pill">時尚達人</span>
+                </div>
+            </div>
+            <div class="about-visual" style="background-image: url('{{ panel_src or avatar_src }}');">
+                <span>在 /static/assets/cony-story.png 放上插圖</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="card chat-card">
+        <div class="card-header">
+            <h2>即時聊天 Demo</h2>
+            <p>馬上和 Cony 聊天，更快掌握她的語氣與個性。</p>
+        </div>
+        <div id="chat-log" class="chat-log" aria-live="polite"></div>
+        <form id="chat-form" class="chat-form">
+            <input type="text" id="chat-input" placeholder="輸入訊息..." required maxlength="200">
+            <button type="submit" class="primary">送出</button>
+        </form>
+    </section>
+</main>
+{% endblock %}
