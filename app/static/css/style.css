@@ -414,26 +414,33 @@ body::before {
     border-radius: 20px;
     padding: 1rem;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
 }
 
 .chat-bubble {
     max-width: 80%;
-    padding: 0.75rem 1rem;
+    width: fit-content;
+    padding: 0.65rem 0.95rem;
     border-radius: 18px;
-    margin-bottom: 0.75rem;
     line-height: 1.4;
+    word-break: break-word;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
 }
 
 .chat-bubble.user {
     background: var(--purple);
     color: var(--white);
-    margin-left: auto;
+    align-self: flex-end;
+    border-bottom-right-radius: 6px;
 }
 
 .chat-bubble.cony {
     background: var(--pink);
     color: var(--white);
-    margin-right: auto;
+    align-self: flex-start;
+    border-bottom-left-radius: 6px;
 }
 
 .chat-form {

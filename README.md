@@ -53,7 +53,10 @@ static/assets/
    ```
 2. Set the required environment variables (or create a `.env` file):
    ```bash
-   export OPENAI_API_KEY="sk-..."
+   export OPENAI_API_KEY="ok-..."
+   export OPENAI_API_BASE="https://openai-proxy-apigw-genai.api.linecorp.com/v1"  # optional override
+   export OPENAI_USER_ID="your-employee-id"  # optional header for proxy
+   export OPENAI_APP_TITLE="cony-playland"   # optional header for proxy
    export LINE_CHANNEL_ACCESS_TOKEN="..."
    export LINE_CHANNEL_SECRET="..."
    ```
