@@ -43,8 +43,11 @@ templates/
 static/assets/
 ├── cony-avatar.png        # Circle avatar shown in hero sections
 └── cony-story.png         # Square panel used in the About page
+frontend/
+├── static/                # CSS/JS/assets served by FastAPI
+└── templates/             # Jinja2 templates
 data/
-└── coupons.json           # Seed coupons and game-generated rewards (persisted in dev/demo)
+└── coupons.json           # Seed coupons for initial insertion into Postgres
 prompts/
 └── prompt.txt             # Cony persona prompt consumed by chat + LINE webhook
 ```
@@ -55,15 +58,14 @@ prompts/
    python3 -m venv .venv && source .venv/bin/activate
    pip install -r requirements.txt
    ```
-2. Set the required environment variables (or create a `.env` file):
+2. Configure environment variables by copying the appropriate template:
    ```bash
-   export OPENAI_API_KEY="ok-..."
-   export OPENAI_API_BASE="https://openai-proxy-apigw-genai.api.linecorp.com/v1"  # optional override
-   export OPENAI_USER_ID="your-employee-id"  # optional header for proxy
-   export OPENAI_APP_TITLE="cony-playland"   # optional header for proxy
-   export LINE_CHANNEL_ACCESS_TOKEN="..."
-   export LINE_CHANNEL_SECRET="..."
+   cp .env.dev .env   # local/external DB (Render external host)
+   # or
+   cp .env.prod .env  # in-cluster/internal DB (Render internal host)
    ```
+   `DEFAULT_USER_ID` controls which `app_user.user_id` receives coupons. If you're just demoing,
+   leave it as `demo-user`; when integrating with real LINE IDs, set it to the actual user identifier.
 3. Run the FastAPI app:
    ```bash
    uvicorn app.main:app --reload
@@ -86,7 +88,7 @@ docker compose up --build
 docker build -t cony-bot .
 docker run --env-file .env -p 8000:8000 cony-bot
 ```
-Remember to set `OPENAI_API_KEY`, `LINE_CHANNEL_ACCESS_TOKEN`, and `LINE_CHANNEL_SECRET` in `.env` before building.
+Remember to set `OPENAI_API_KEY`, `LINE_CHANNEL_ACCESS_TOKEN`, `LINE_CHANNEL_SECRET`, and `DATABASE_URL` in `.env` before building. For Render deployments, use the internal connection string (`postgresql://...@dpg-d4i6f895pdvs739knqp0-a/cony_db`) so traffic stays on the private network. The app expects the PostgreSQL schema described in `/database/models.py` (tables `app_user` and `coupon`).
 
 ### Customizing Cony images
 - Hero avatar: place `cony-avatar.png` (or update `AVATAR_SRC` in `app/routers/frontend.py`).

@@ -16,6 +16,8 @@ class Settings(BaseSettings):
     line_channel_access_token: str
     line_channel_secret: str
     line_api_timeout: float = 10.0
+    database_url: str
+    default_user_id: str = "demo-user"
 
     class Config:
         env_file = ".env"

@@ -8,9 +8,8 @@ const fetchAboutCony = async (container) => {
     }
 };
 
-const getCouponClass = (coupon) => {
-    return coupon && coupon.source === 'game' ? 'coupon-card is-game' : 'coupon-card';
-};
+const getCouponClass = (coupon) =>
+    coupon && coupon.source === 'game' ? 'coupon-card is-game' : 'coupon-card';
 
 const formatCoupon = (coupon) => {
     const badge =
@@ -25,6 +24,9 @@ const formatCoupon = (coupon) => {
             </div>
             <h3>${coupon.title}</h3>
             <p>${coupon.description}</p>
+            <div class="coupon-card__actions">
+                <button class="use-button" data-coupon-code="${coupon.id}">使用</button>
+            </div>
         </li>
     `;
 };
@@ -110,6 +112,38 @@ const renderRecentCoupon = (container, coupon) => {
     container.innerHTML = formatCoupon(coupon);
 };
 
+const useCoupon = async (code, onSuccess) => {
+    try {
+        const res = await fetch('/use-coupon', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ coupon_code: code })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+            throw new Error(data.detail || '無法使用優惠券');
+        }
+        if (typeof onSuccess === 'function') {
+            onSuccess();
+        }
+    } catch (error) {
+        alert(error.message || '使用優惠券失敗，稍後再試。');
+    }
+};
+
+const attachCouponActions = (container, refreshCallback) => {
+    if (!container) return;
+    container.addEventListener('click', (event) => {
+        const button = event.target.closest('button[data-coupon-code]');
+        if (!button) return;
+        const code = button.dataset.couponCode;
+        if (!code) return;
+        const confirmed = window.confirm(`確定要使用優惠券 ${code} 嗎？`);
+        if (!confirmed) return;
+        useCoupon(code, refreshCallback);
+    });
+};
+
 const initPlayPage = () => {
     const gameChoiceContainer = document.getElementById('game-choices');
     const gameResult = document.getElementById('game-result');
@@ -117,6 +151,13 @@ const initPlayPage = () => {
     if (!gameChoiceContainer || !gameResult) return;
 
     renderRecentCoupon(playCouponList, null);
+    attachCouponActions(playCouponList, () => {
+        renderRecentCoupon(playCouponList, null);
+        const globalList = document.getElementById('coupon-list');
+        if (globalList) {
+            fetchCoupons(globalList);
+        }
+    });
 
     gameChoiceContainer.addEventListener('click', (event) => {
         const button = event.target.closest('button[data-choice]');
@@ -163,6 +204,7 @@ const playGame = async (choice, container, resultEl, recentCouponList) => {
 const initCouponsPage = () => {
     const couponList = document.getElementById('coupon-list');
     fetchCoupons(couponList);
+    attachCouponActions(couponList, () => fetchCoupons(couponList));
 };
 
 const initPage = () => {

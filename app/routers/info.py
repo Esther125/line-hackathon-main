@@ -30,6 +30,10 @@ class PlayRequest(BaseModel):
     ]
 
 
+class UseCouponRequest(BaseModel):
+    coupon_code: str = Field(..., min_length=1, max_length=64)
+
+
 def _render_about_cony() -> str:
     traits = [
         "性格活潑外向、熱情可愛，總是第一個帶起氣氛",
@@ -92,3 +96,16 @@ async def play_with_cony(
         "reward": result.reward,
         "available_choices": CHOICES,
     }
+
+
+@router.post("/use-coupon")
+async def use_coupon(
+    payload: UseCouponRequest,
+    coupon_service: CouponService = Depends(get_coupon_service),
+) -> dict:
+    """Consume a coupon by removing it from the user's catalog."""
+
+    success = coupon_service.consume_coupon(payload.coupon_code)
+    if not success:
+        raise HTTPException(status_code=404, detail="找不到這張優惠券")
+    return {"status": "consumed", "code": payload.coupon_code}

@@ -41,6 +41,7 @@ def _render_page(
         "title": title,
         "page_id": page_id,
         "avatar_src": _asset_url(request, *AVATAR_CANDIDATES),
+        "current_user_id": getattr(request.app.state, "default_user_id", None),
     }
     if extra_context:
         context.update(extra_context)

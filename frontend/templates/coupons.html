@@ -13,7 +13,12 @@
 
     <section class="card" id="coupons-section">
         <div class="card-header">
-            <h2>我的優惠券</h2>
+            <h2>
+                我的優惠券
+                {% if current_user_id %}
+                <span class="user-badge">會員編號：{{ current_user_id }}</span>
+                {% endif %}
+            </h2>
             <p>依照獲得順序列出，方便搭配LINE圖文選單。</p>
         </div>
         <ul id="coupon-list" class="coupon-list"></ul>

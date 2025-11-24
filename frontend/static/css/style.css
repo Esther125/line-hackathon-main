@@ -257,6 +257,16 @@ body::before {
     color: #775b73;
 }
 
+.user-badge {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--pink-dark);
+    background: rgba(255, 143, 199, 0.2);
+    padding: 0.2rem 0.7rem;
+    border-radius: 999px;
+    margin-left: 0.5rem;
+}
+
 .hero.simple {
     background: linear-gradient(120deg, #ff9bcf, #fb5aa7);
     color: #fff;
@@ -547,6 +557,33 @@ body::before {
 
 .coupon-card.is-game small {
     color: rgba(255, 255, 255, 0.85);
+}
+
+.coupon-card__actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.75rem;
+}
+
+.use-button {
+    border: none;
+    background: var(--pink-light);
+    color: var(--pink-dark);
+    font-weight: 700;
+    padding: 0.5rem 1.2rem;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 6px 15px rgba(255, 143, 199, 0.35);
+}
+
+.use-button:hover {
+    transform: translateY(-2px);
+}
+
+.coupon-card.is-game .use-button {
+    background: rgba(255, 255, 255, 0.25);
+    color: var(--white);
 }
 
 .pill-row {
