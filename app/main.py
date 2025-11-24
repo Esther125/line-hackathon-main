@@ -10,7 +10,7 @@ app = FastAPI(title="Cony LINE Friend")
 app.include_router(line.router)
 app.include_router(info.router)
 app.include_router(frontend.router)
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
+app.mount("/static", StaticFiles(directory="frontend/static"), name="static")
 
 
 @app.get("/health")

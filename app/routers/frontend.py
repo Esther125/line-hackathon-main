@@ -7,8 +7,8 @@ from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
-templates = Jinja2Templates(directory="app/templates")
-STATIC_ROOT = Path(__file__).resolve().parent.parent / "static"
+templates = Jinja2Templates(directory="frontend/templates")
+STATIC_ROOT = Path(__file__).resolve().parent.parent.parent / "frontend" / "static"
 AVATAR_CANDIDATES = ("assets/cony.png", "assets/cony-avatar.png")
 PANEL_CANDIDATES = ("assets/cony-story.png", *AVATAR_CANDIDATES)
 PANEL_VIDEO_CANDIDATES = (

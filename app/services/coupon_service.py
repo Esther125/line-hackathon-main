@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 from typing import Dict, List, Sequence
 
-DEFAULT_DATA_PATH = Path(__file__).resolve().parent.parent / "data" / "coupons.json"
+DEFAULT_DATA_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "coupons.json"
 
 
 class CouponService:

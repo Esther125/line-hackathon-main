@@ -43,6 +43,10 @@ templates/
 static/assets/
 ├── cony-avatar.png        # Circle avatar shown in hero sections
 └── cony-story.png         # Square panel used in the About page
+data/
+└── coupons.json           # Seed coupons and game-generated rewards (persisted in dev/demo)
+prompts/
+└── prompt.txt             # Cony persona prompt consumed by chat + LINE webhook
 ```
 
 ## Getting Started

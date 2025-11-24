@@ -8,7 +8,7 @@ from typing import List, Optional
 import requests
 from requests import RequestException
 
-DEFAULT_PROMPT_PATH = Path(__file__).resolve().parent.parent / "prompts" / "prompt.txt"
+DEFAULT_PROMPT_PATH = Path(__file__).resolve().parent.parent.parent / "prompts" / "prompt.txt"
 
 
 class ConyChatService:
