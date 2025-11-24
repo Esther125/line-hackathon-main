@@ -64,8 +64,10 @@ prompts/
    # or
    cp .env.prod .env  # in-cluster/internal DB (Render internal host)
    ```
-   `DEFAULT_USER_ID` controls which `app_user.user_id` receives coupons. If you're just demoing,
-   leave it as `demo-user`; when integrating with real LINE IDs, set it to the actual user identifier.
+   `DEFAULT_USER_ID` controls which `app_user.user_id` receives coupons when a LINE Login cookie
+   is absent. Once LINE Login succeeds, the site stores the LINE user ID in `cony_user_id`
+   (cookie) so that user's coupons stay isolated. To enable LINE Login you must set
+   `LINE_LOGIN_CHANNEL_ID`, `LINE_LOGIN_CHANNEL_SECRET`, and `LINE_LOGIN_REDIRECT_URI`.
 3. Run the FastAPI app:
    ```bash
    uvicorn app.main:app --reload
@@ -88,7 +90,12 @@ docker compose up --build
 docker build -t cony-bot .
 docker run --env-file .env -p 8000:8000 cony-bot
 ```
-Remember to set `OPENAI_API_KEY`, `LINE_CHANNEL_ACCESS_TOKEN`, `LINE_CHANNEL_SECRET`, and `DATABASE_URL` in `.env` before building. For Render deployments, use the internal connection string (`postgresql://...@dpg-d4i6f895pdvs739knqp0-a/cony_db`) so traffic stays on the private network. The app expects the PostgreSQL schema described in `/database/models.py` (tables `app_user` and `coupon`).
+Remember to set `OPENAI_API_KEY`, `LINE_CHANNEL_ACCESS_TOKEN`, `LINE_CHANNEL_SECRET`, `DATABASE_URL`, and the LINE Login credentials in `.env` before building. For Render deployments, use the internal connection string (`postgresql://...@dpg-d4i6f895pdvs739knqp0-a/cony_db`) so traffic stays on the private network. The app expects the PostgreSQL schema described in `/database/models.py` (tables `app_user` and `coupon`).
+
+### LINE Login
+1. Hit `/login-line` (or the "LINE Login" button on the coupon page) to start OAuth; you can pass `?return_to=/play` if you want a different landing page after login.
+2. LINE redirects to `/line-login/callback`, where the backend exchanges the code, fetches the user profile, and stores the LINE `userId` in the `cony_user_id` cookie.
+3. Subsequent coupon/game API calls will use that user ID when reading/writing records; if no cookie exists, the `DEFAULT_USER_ID` value is used as a fallback.
 
 ### Customizing Cony images
 - Hero avatar: place `cony-avatar.png` (or update `AVATAR_SRC` in `app/routers/frontend.py`).

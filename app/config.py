@@ -18,6 +18,9 @@ class Settings(BaseSettings):
     line_api_timeout: float = 10.0
     database_url: str
     default_user_id: str = "demo-user"
+    line_login_channel_id: str | None = None
+    line_login_channel_secret: str | None = None
+    line_login_redirect_uri: str | None = None
 
     class Config:
         env_file = ".env"

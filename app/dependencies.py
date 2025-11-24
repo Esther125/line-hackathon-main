@@ -7,6 +7,7 @@ from fastapi import Depends
 
 from app.config import Settings, get_settings
 from sqlalchemy.orm import Session
+from fastapi import Request
 
 from app.services.chat_service import ConyChatService
 from app.services.coupon_service import CouponService
@@ -56,15 +57,32 @@ def get_chat_service(
     )
 
 
+def get_current_user_id(
+    request: Request,
+    settings: Settings = Depends(get_settings),
+) -> str:
+    """Determine the user id from cookies or fallback to default."""
+
+    user_id = request.cookies.get("cony_user_id")
+    if user_id:
+        request.state.current_user_id = user_id
+        request.state.from_cookie = True
+        return user_id
+    request.state.current_user_id = settings.default_user_id
+    request.state.from_cookie = False
+    return settings.default_user_id
+
+
 def get_coupon_service(
     db: Session = Depends(get_db),
     settings: Settings = Depends(get_settings),
+    user_id: str = Depends(get_current_user_id),
 ) -> CouponService:
     """Provide a coupon service backed by the Postgres database."""
 
     return CouponService(
         session=db,
-        default_user_id=settings.default_user_id,
+        default_user_id=user_id,
     )
 
 

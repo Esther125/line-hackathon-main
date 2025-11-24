@@ -36,12 +36,17 @@ def _render_page(
     title: str,
     extra_context: dict | None = None,
 ) -> HTMLResponse:
+    default_user_id = getattr(request.app.state, "default_user_id", None)
+    cookie_user_id = request.cookies.get("cony_user_id")
+    current_user_id = cookie_user_id or default_user_id
+    using_default_user = cookie_user_id is None
     context = {
         "request": request,
         "title": title,
         "page_id": page_id,
         "avatar_src": _asset_url(request, *AVATAR_CANDIDATES),
-        "current_user_id": getattr(request.app.state, "default_user_id", None),
+        "current_user_id": current_user_id,
+        "using_default_user": using_default_user,
     }
     if extra_context:
         context.update(extra_context)
