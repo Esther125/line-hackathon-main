@@ -1,13 +1,14 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "base.html" %} {% block content %}
 <main class="cony-app play-page">
     <header class="hero sub">
         <div>
             <p class="eyebrow">和Cony玩遊戲</p>
             <h1>Play with Cony</h1>
-            <p>猜 Cony 想吃哪種甜點，只要猜中就贏得新的優惠券。</p>
+            <p>和 Cony 一起玩小遊戲，只要贏了就得到最新的優惠券！</p>
         </div>
-        <div class="hero-avatar" style="background-image: url('{{ avatar_src }}');"></div>
+        <div class="hero-avatar">
+            <img src="{{ avatar_src }}" alt="Cony avatar" />
+        </div>
     </header>
 
     <section class="card">

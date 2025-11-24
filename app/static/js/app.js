@@ -8,22 +8,34 @@ const fetchAboutCony = async (container) => {
     }
 };
 
+const getCouponClass = (coupon) => {
+    return coupon && coupon.source === 'game' ? 'coupon-card is-game' : 'coupon-card';
+};
+
+const formatCoupon = (coupon) => {
+    const badge =
+        coupon && coupon.source === 'game'
+            ? '<span class="coupon-badge">遊戲限定</span>'
+            : '<span class="coupon-badge catalog">常駐優惠</span>';
+    return `
+        <li class="${getCouponClass(coupon)}">
+            <div class="coupon-card__head">
+                ${badge}
+                <small>代碼：${coupon.id}</small>
+            </div>
+            <h3>${coupon.title}</h3>
+            <p>${coupon.description}</p>
+        </li>
+    `;
+};
+
 const renderCoupons = (container, coupons) => {
     if (!container) return;
     if (!coupons.length) {
         container.innerHTML = '<li>尚無優惠券，再玩一次試試吧！</li>';
         return;
     }
-    container.innerHTML = coupons
-        .map(
-            (coupon) => `
-            <li class="coupon-card">
-                <h3>${coupon.title}</h3>
-                <p>${coupon.description}</p>
-                <small>代碼：${coupon.id}</small>
-            </li>`
-        )
-        .join('');
+    container.innerHTML = coupons.map((coupon) => formatCoupon(coupon)).join('');
 };
 
 const fetchCoupons = async (container) => {
@@ -95,13 +107,7 @@ const renderRecentCoupon = (container, coupon) => {
         container.innerHTML = '<li>尚未贏得優惠券，趕快挑戰吧！</li>';
         return;
     }
-    container.innerHTML = `
-        <li class="coupon-card">
-            <h3>${coupon.title}</h3>
-            <p>${coupon.description}</p>
-            <small>代碼：${coupon.id}</small>
-        </li>
-    `;
+    container.innerHTML = formatCoupon(coupon);
 };
 
 const initPlayPage = () => {

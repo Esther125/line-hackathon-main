@@ -162,20 +162,25 @@ body::before {
     height: 190px;
     border-radius: 50%;
     border: 6px solid rgba(255, 255, 255, 0.65);
-    background-color: rgba(255, 255, 255, 0.25);
-    background-position: center;
-    background-size: cover;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 1rem;
-    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.35);
+    padding: 0;
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.35), 0 8px 25px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    position: relative;
 }
 
 .hero-avatar span {
     font-size: 0.85rem;
     color: rgba(255, 255, 255, 0.9);
+}
+
+.hero-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 45% center;
+    transform: scale(1);
+    border-radius: inherit;
+    display: block;
 }
 
 .primary {
@@ -268,10 +273,21 @@ body::before {
     width: min(220px, 40vw);
     aspect-ratio: 1 / 1;
     border-radius: 28px;
-    background: rgba(255, 255, 255, 0.2);
-    background-position: center;
-    background-size: cover;
-    border: 4px solid rgba(255, 255, 255, 0.4);
+    border: 6px solid rgba(255, 255, 255, 0.65);
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.35), 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.hero-square img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 45% center;
+    transform: scale(1);
+    border-radius: inherit;
+    display: block;
 }
 
 .feature-rows {
@@ -350,7 +366,7 @@ body::before {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 1.5rem;
-    align-items: stretch;
+    align-items: center;
 }
 
 .about-text {
@@ -361,18 +377,34 @@ body::before {
 
 .about-visual {
     min-height: 200px;
+    max-width: 340px;
+    margin: 0 auto;
+    aspect-ratio: 1 / 1;
     border-radius: 24px;
     background: linear-gradient(135deg, rgba(255, 143, 199, 0.15), rgba(255, 255, 255, 0.8));
     border: 2px dashed rgba(255, 143, 199, 0.7);
-    background-position: center;
-    background-size: cover;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-    text-align: center;
-    color: var(--pink-dark);
-    font-weight: 600;
+    position: relative;
+    overflow: hidden;
+}
+
+.about-visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 45% center;
+    transform: scale(1);
+    border-radius: inherit;
+    display: block;
+}
+
+.about-visual video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 45% center;
+    transform: scale(1);
+    border-radius: inherit;
+    display: block;
 }
 
 .chat-log {
@@ -460,10 +492,54 @@ body::before {
 }
 
 .coupon-card {
-    padding: 1rem 1.2rem;
-    background: linear-gradient(120deg, rgba(255, 143, 199, 0.15), rgba(255, 255, 255, 0.8));
-    border-radius: 18px;
-    border: 2px dashed var(--pink-dark);
+    padding: 1.3rem 1.4rem;
+    background: #fff;
+    border-radius: 22px;
+    border: 2px dashed rgba(255, 143, 199, 0.35);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.coupon-card.is-game {
+    background: linear-gradient(135deg, #ff7fbb, #fb5aa7);
+    color: var(--white);
+    border: none;
+    box-shadow: 0 18px 35px rgba(251, 90, 167, 0.45);
+}
+
+.coupon-card__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    gap: 0.75rem;
+}
+
+.coupon-badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+    background: rgba(255, 143, 199, 0.2);
+    color: var(--pink-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.coupon-badge.catalog {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255, 143, 199, 0.4);
+}
+
+.coupon-card.is-game .coupon-badge {
+    background: rgba(255, 255, 255, 0.25);
+    color: var(--white);
+}
+
+.coupon-card.is-game small {
+    color: rgba(255, 255, 255, 0.85);
 }
 
 .pill-row {

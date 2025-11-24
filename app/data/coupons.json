@@ -1,17 +1,20 @@
 [
   {
     "id": "brunch-001",
-    "title": "Brunch with Brown",
-    "description": "Buy one get one carrot croissant at Brown's Cafe."
+    "title": "Brown 粉紅早午餐",
+    "description": "在 Brown's Café 點任一主餐即享第二份 5 折。",
+    "source": "catalog"
   },
   {
     "id": "dessert-007",
-    "title": "Bubble Tea Upgrade",
-    "description": "Free topping upgrade when you order milk tea."
+    "title": "奶茶珍珠升級券",
+    "description": "點奶茶免費加珍珠或奶霜，還會附上甜點貼紙。",
+    "source": "catalog"
   },
   {
     "id": "fashion-042",
-    "title": "Cony Style Boost",
-    "description": "10% off any pink outfit in LINE FRIENDS store."
+    "title": "Cony 時尚加乘",
+    "description": "LINE FRIENDS 門市粉紅單品 95 折，結帳再送貼紙。",
+    "source": "catalog"
   }
 ]

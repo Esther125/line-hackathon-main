@@ -22,7 +22,13 @@ class CouponService:
             raw = self._data_path.read_text(encoding="utf-8")
             data = json.loads(raw or "[]")
             if isinstance(data, list):
-                return [dict(item) for item in data]
+                catalog: List[Dict[str, str]] = []
+                for item in data:
+                    normalized = dict(item)
+                    if "source" not in normalized:
+                        normalized["source"] = "catalog"
+                    catalog.append(normalized)
+                return catalog
             raise ValueError(f"Coupon data must be a list, got {type(data)}")
 
         self._data_path.write_text("[]", encoding="utf-8")
@@ -61,6 +67,7 @@ class CouponService:
             "id": f"cony-{self._counter}",
             "title": title,
             "description": description,
+            "source": "game",
         }
         self._catalog.append(coupon)
         self._save_catalog()

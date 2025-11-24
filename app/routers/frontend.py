@@ -1,15 +1,32 @@
 """Frontend routes serving the Cony UI."""
 from __future__ import annotations
 
+from pathlib import Path
+
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
 templates = Jinja2Templates(directory="app/templates")
-AVATAR_SRC = "/static/assets/cony-avatar.png"
-PANEL_SRC = "/static/assets/cony-story.png"
+STATIC_ROOT = Path(__file__).resolve().parent.parent / "static"
+AVATAR_CANDIDATES = ("assets/cony.png", "assets/cony-avatar.png")
+PANEL_CANDIDATES = ("assets/cony-story.png", *AVATAR_CANDIDATES)
+PANEL_VIDEO_CANDIDATES = (
+    "assets/cozy-dance-resized.mp4",
+    "assets/cony-dance.mp4",
+    "assets/cony-story.mp4",
+    "assets/cony-story.webm",
+)
 
 router = APIRouter(tags=["frontend"])
+
+
+def _asset_url(request: Request, *relative_paths: str) -> str:
+    for relative_path in relative_paths:
+        static_path = STATIC_ROOT / relative_path
+        if static_path.exists():
+            return request.url_for("static", path=relative_path)
+    return ""
 
 
 def _render_page(
@@ -23,7 +40,7 @@ def _render_page(
         "request": request,
         "title": title,
         "page_id": page_id,
-        "avatar_src": AVATAR_SRC,
+        "avatar_src": _asset_url(request, *AVATAR_CANDIDATES),
     }
     if extra_context:
         context.update(extra_context)
@@ -46,7 +63,10 @@ async def about_page(request: Request) -> HTMLResponse:
         "about.html",
         page_id="about",
         title="About Cony",
-        extra_context={"panel_src": PANEL_SRC},
+        extra_context={
+            "panel_src": _asset_url(request, *PANEL_CANDIDATES),
+            "panel_video_src": _asset_url(request, *PANEL_VIDEO_CANDIDATES),
+        },
     )
 
 

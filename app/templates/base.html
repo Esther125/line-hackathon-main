@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title or 'Cony Playland' }}</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600&display=swap">
-    <link rel="stylesheet" href="/static/css/style.css">
-</head>
-<body data-page="{{ page_id or 'home' }}">
-    <a class="home-chip" href="/" aria-label="Cony Home">🏠 Cony首頁</a>
-    {% block content %}{% endblock %}
-    <script src="/static/js/app.js" defer></script>
-</body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{{ title or 'Cony Playland' }}</title>
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600&display=swap"
+        />
+        <link rel="stylesheet" href="/static/css/style.css" />
+    </head>
+    <body data-page="{{ page_id or 'home' }}">
+        <a class="home-chip" href="/" aria-label="Cony Home"
+            >🏠 Cony's Playground</a
+        >
+        {% block content %}{% endblock %}
+        <script src="/static/js/app.js" defer></script>
+    </body>
 </html>
