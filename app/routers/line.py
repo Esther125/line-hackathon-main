@@ -9,8 +9,8 @@ from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 
 from app.config import Settings, get_settings
-from app.dependencies import get_chat_service
-from app.services.chat_service import ConyChatService
+from app.dependencies import get_line_chat_service
+from app.services.line_chat_service import LineChatService
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +22,7 @@ async def line_callback(
     request: Request,
     x_line_signature: str = Header(..., alias="x-line-signature"),
     settings: Settings = Depends(get_settings),
-    chat_service: ConyChatService = Depends(get_chat_service),
+    chat_service: LineChatService = Depends(get_line_chat_service),
 ) -> dict:
     """Receive LINE webhook events and reply using the Cony chat persona."""
 
@@ -38,7 +38,8 @@ async def line_callback(
 
     for event in events:
         if isinstance(event, MessageEvent) and isinstance(event.message, TextMessage):
-            reply_text = await chat_service.generate_reply(event.message.text)
+            user_text = event.message.text or ""
+            reply_text = await chat_service.generate_reply(user_text)
             line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(text=reply_text),

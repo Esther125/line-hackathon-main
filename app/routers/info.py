@@ -7,8 +7,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, Field
 
-from app.dependencies import get_chat_service, get_coupon_service, get_game_service
-from app.services.chat_service import ConyChatService
+from app.dependencies import get_coupon_service, get_game_service, get_web_chat_service
+from app.services.web_chat_service import WebChatService
 from app.services.coupon_service import CouponService
 from app.services.game_service import CHOICES, GameResult, GameService
 
@@ -69,7 +69,7 @@ async def view_coupons(coupon_service: CouponService = Depends(get_coupon_servic
 @router.post("/chat-with-cony")
 async def chat_with_cony(
     payload: ChatRequest,
-    chat_service: ConyChatService = Depends(get_chat_service),
+    chat_service: WebChatService = Depends(get_web_chat_service),
 ) -> dict:
     """Expose Cony's chat persona for the frontend interface."""
 

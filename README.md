@@ -30,7 +30,8 @@ app/
 frontend/
 ├── templates/             # index/about/play/coupons (Jinja)
 └── static/                # css/style.css, js/app.js, assets
-prompts/prompt.txt         # Cony persona
+prompts/web_prompt.txt     # Casual chat persona (網站)
+prompts/line_prompt.txt    # LINE 官方帳號/客服 persona
 data/coupons.json          # Optional seed data (manual import)
 database/                  # SQLAlchemy models + session helper
 ```
@@ -83,5 +84,7 @@ docker run --env-file .env -p 8000:8000 cony-bot
 
 ## Notes
 
--   Coupons are stored per user (`DEFAULT_USER_ID` when no login, LINE ID otherwise).
--   Chat replies are Traditional Chinese; update `prompts/prompt.txt` if you want different tone.
+-   Coupons are stored per user (`DEFAULT_USER_ID` when no login, LINE userId otherwise).
+-   `data/coupons.json` is optional seed data; insert it into Postgres manually if you want default catalog coupons.
+-   Web chat uses `prompts/web_prompt.txt` (休閒語氣)，LINE webhook uses `prompts/line_prompt.txt`（客服/促銷，辨識 `@客戶服務`、`@促銷活動`）。
+-   Chat replies remain in Traditional Chinese; adjust the prompt files if you need different tone.

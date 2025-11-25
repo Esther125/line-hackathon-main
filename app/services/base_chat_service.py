@@ -1,4 +1,4 @@
-"""Service responsible for generating Cony-style replies."""
+"""Shared chat service utilities for Cony experiences."""
 from __future__ import annotations
 
 import asyncio
@@ -8,20 +8,20 @@ from typing import List, Optional
 import requests
 from requests import RequestException
 
-DEFAULT_PROMPT_PATH = Path(__file__).resolve().parent.parent.parent / "prompts" / "prompt.txt"
 
-
-class ConyChatService:
-    """Wraps interactions with the ChatGPT API while enforcing Cony's persona."""
+class BaseChatService:
+    """Wraps interactions with the chat completion API."""
 
     def __init__(
         self,
         api_key: str,
         api_base: str,
+        persona_path: str | Path,
         user_id: Optional[str] = None,
         app_title: Optional[str] = None,
         model: str = "gpt-4o",
         timeout: int = 30,
+        fallback_persona: str | None = None,
     ) -> None:
         self._api_key = api_key
         self._api_base = api_base.rstrip("/")
@@ -30,20 +30,16 @@ class ConyChatService:
         self._app_title = app_title
         self._model = model
         self._timeout = timeout
+        self._persona_path = Path(persona_path)
+        self._fallback_persona = fallback_persona
         self._persona = self._load_persona()
 
-    def _build_messages(self, user_text: str) -> List[dict]:
-        return [
-            {"role": "system", "content": self._persona},
-            {
-                "role": "user",
-                "content": (
-                    "User said: "
-                    f"{user_text}. Reply as Cony in Traditional Chinese, be concise "
-                    "but expressive."
-                ),
-            },
-        ]
+    def _load_persona(self) -> str:
+        if self._persona_path.exists():
+            return self._persona_path.read_text(encoding="utf-8").strip()
+        if self._fallback_persona:
+            return self._fallback_persona.strip()
+        return "回覆時請用繁體中文。"
 
     def _headers(self) -> dict:
         headers = {
@@ -56,10 +52,19 @@ class ConyChatService:
             headers["X-Title"] = self._app_title
         return headers
 
-    async def generate_reply(self, user_text: str) -> str:
-        """Call the ChatGPT API in a worker thread to produce a reply."""
+    def _build_messages(self, user_text: str) -> List[dict]:
+        return [
+            {"role": "system", "content": self._persona},
+            {
+                "role": "user",
+                "content": user_text,
+            },
+        ]
 
-        def _call_proxy() -> str:
+    async def generate_reply(self, user_text: str) -> str:
+        """Call the chat completion API in a worker thread."""
+
+        def _call() -> str:
             payload = {
                 "model": self._model,
                 "messages": self._build_messages(user_text),
@@ -77,18 +82,8 @@ class ConyChatService:
             return data["choices"][0]["message"]["content"].strip()
 
         try:
-            return await asyncio.to_thread(_call_proxy)
+            return await asyncio.to_thread(_call)
         except RequestException:
-            return "Cony 暫時連不上粉紅雲端，先跟你大大抱歉！稍後再試一次好嗎？"
+            return "Cony 暫時連不上粉紅雲端，先跟你抱歉！稍後再試一次好嗎？"
         except Exception:
-            return "Cony 今天有點累，幫我跟 Brown 說我晚點回來～"
-    def _load_persona(self) -> str:
-        if DEFAULT_PROMPT_PATH.exists():
-            return DEFAULT_PROMPT_PATH.read_text(encoding="utf-8").strip()
-        return (
-            "You are Cony,一位 LINE FRIENDS 延伸出來的兔子系少女，熱愛粉紅色、甜點、舞台與可愛表演。"
-            " 你剛解鎖熱門的「上車舞」，永遠戴著白色兔子髮箍，說話活潑又撒嬌。"
-            " Personality: energetic, affectionate, bubbly, instantly befriending everyone."
-            " Tone: 可愛、熱情、表情符號很多但易讀。"
-            " 經常提到跳舞練習、甜點，以及粉紅穿搭。"
-        )
+            return "Cony 今天有點累，等我補妝一下再回你～"

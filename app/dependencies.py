@@ -3,26 +3,40 @@ from __future__ import annotations
 
 from functools import lru_cache
 
-from fastapi import Depends
+from fastapi import Depends, Request
+from sqlalchemy.orm import Session
 
 from app.config import Settings, get_settings
-from sqlalchemy.orm import Session
-from fastapi import Request
-
-from app.services.chat_service import ConyChatService
 from app.services.coupon_service import CouponService
 from app.services.game_service import GameService
+from app.services.line_chat_service import LineChatService
+from app.services.web_chat_service import WebChatService
 from database.session import create_session_factory
 
 
 @lru_cache
-def _chat_service(
+def _web_chat_service(
     api_key: str,
     api_base: str,
     user_id: str | None,
     app_title: str | None,
-) -> ConyChatService:
-    return ConyChatService(
+) -> WebChatService:
+    return WebChatService(
+        api_key=api_key,
+        api_base=api_base,
+        user_id=user_id,
+        app_title=app_title,
+    )
+
+
+@lru_cache
+def _line_chat_service(
+    api_key: str,
+    api_base: str,
+    user_id: str | None,
+    app_title: str | None,
+) -> LineChatService:
+    return LineChatService(
         api_key=api_key,
         api_base=api_base,
         user_id=user_id,
@@ -44,12 +58,23 @@ def get_db(settings: Settings = Depends(get_settings)) -> Session:
         db.close()
 
 
-def get_chat_service(
+def get_web_chat_service(
     settings: Settings = Depends(get_settings),
-) -> ConyChatService:
+) -> WebChatService:
     """Provide a singleton chat service configured with the OpenAI key."""
 
-    return _chat_service(
+    return _web_chat_service(
+        settings.openai_api_key,
+        settings.openai_api_base,
+        settings.openai_user_id,
+        settings.openai_app_title,
+    )
+
+
+def get_line_chat_service(
+    settings: Settings = Depends(get_settings),
+) -> LineChatService:
+    return _line_chat_service(
         settings.openai_api_key,
         settings.openai_api_base,
         settings.openai_user_id,
